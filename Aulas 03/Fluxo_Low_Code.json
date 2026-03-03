@@ -1,0 +1,321 @@
+[
+    {
+        "id": "3938013e2d93f6f6",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e83138d67be6827d",
+        "type": "inject",
+        "z": "3938013e2d93f6f6",
+        "name": "Gerar leitura",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "3220e13e927d1e22"
+            ]
+        ]
+    },
+    {
+        "id": "3220e13e927d1e22",
+        "type": "function",
+        "z": "3938013e2d93f6f6",
+        "name": "Simular vibração",
+        "func": "\n//Simulação de vibração do ADXL345 em 3 eixos\nlet vibX = (Math.random() * 2 - 1).toFixed(2);  // Eixo X (-1 a 1 m/s²)\nlet vibY = (Math.random() * 2 - 1).toFixed(2);  // Eixo Y (-1 a 1m/s²)\nlet vibZ = (9.81 + (Math.random()) * 0.5 - 0.25).toFixed(2); // Eixo Z - \"9.81\" simula a gravidade \n\n\nlet msgs = [];\n\nmsgs.push({ topic: \"X\", payload: parseFloat(vibX) })\nmsgs.push({ topic: \"Y\", payload: parseFloat(vibY) })\nmsgs.push({ topic: \"Z\", payload: parseFloat(vibZ) })\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "d972ad6d95d553f5",
+                "700a9fd9e6e2b6f0"
+            ]
+        ]
+    },
+    {
+        "id": "d972ad6d95d553f5",
+        "type": "ui_chart",
+        "z": "3938013e2d93f6f6",
+        "name": "",
+        "group": "5034bd6726de8b99",
+        "order": 0,
+        "width": "0",
+        "height": "0",
+        "label": "Simulação ADXL345",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-2",
+        "ymax": "12",
+        "removeOlder": "60",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 620,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "99dd5ef73fa2e9ed",
+        "type": "function",
+        "z": "3938013e2d93f6f6",
+        "name": "Simular temperatura",
+        "func": "\n\nlet temp = (Math.random() * 50).toFixed(2); \n\nlet msgs = [];\n\nmsgs.push({ topic: \"Temperatura\", payload: parseFloat(temp) })\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 500,
+        "wires": [
+            [
+                "53afa2e8b36318f1",
+                "88672829573b16c3",
+                "e8c91691bf81745a"
+            ]
+        ]
+    },
+    {
+        "id": "796876f986b48d96",
+        "type": "ui_chart",
+        "z": "3938013e2d93f6f6",
+        "d": true,
+        "name": "",
+        "group": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "1",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 730,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "53afa2e8b36318f1",
+        "type": "debug",
+        "z": "3938013e2d93f6f6",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "f45fcbf9895a2ff0",
+        "type": "inject",
+        "z": "3938013e2d93f6f6",
+        "name": "Gerar leitura",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "99dd5ef73fa2e9ed"
+            ]
+        ]
+    },
+    {
+        "id": "700a9fd9e6e2b6f0",
+        "type": "debug",
+        "z": "3938013e2d93f6f6",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "88672829573b16c3",
+        "type": "function",
+        "z": "3938013e2d93f6f6",
+        "name": "Verificar limite",
+        "func": "let limite = global.get(\"limiteTemp\") || 30;\nlet temp = msg.payload;\n\nif (temp >= limite) {\n    msg.status = \"ALARME!\";\n    msg.color = \"red\";\n\n} else {\n    msg.status = \"NORMAL\";\n    msg.color = \"green\";\n}\n\nmsg.limite = limite;\n\nreturn msg;\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 540,
+        "wires": [
+            [
+                "b7b0374b0d498c3c"
+            ]
+        ]
+    },
+    {
+        "id": "b7b0374b0d498c3c",
+        "type": "ui_text",
+        "z": "3938013e2d93f6f6",
+        "group": "5034bd6726de8b99",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "Status",
+        "format": "{{msg.status}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "Arial,Arial,Helvetica,sans-serif",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 790,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e8c91691bf81745a",
+        "type": "ui_gauge",
+        "z": "3938013e2d93f6f6",
+        "name": "",
+        "group": "5034bd6726de8b99",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "Temperatura",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 630,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "5034bd6726de8b99",
+        "type": "ui_group",
+        "name": "Graficos",
+        "tab": "4f0e76133cea6866",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4f0e76133cea6866",
+        "type": "ui_tab",
+        "name": "Tab 1",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
