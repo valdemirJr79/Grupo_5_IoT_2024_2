@@ -1,0 +1,21 @@
+
+#include "WiFi.h"
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(115200);
+  
+  delay(1000);
+  WiFi.mode(WIFI_MODE_STA);
+  delay(1000);
+
+  Serial.print("");
+  Serial.print("Endereço MAC ESP32: ");
+  Serial.print(WiFi.macAddress());
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+}

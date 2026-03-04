@@ -1,52 +1,55 @@
-// Include the libraries we need
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <WiFi.h>
+#include <WebServer.h>
+#include "html.h"
 
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 5
+#define DS18B20PIN 02                      /* Connect DS18B20 to Pin No D2 of ESP32*/
+OneWire oneWire(DS18B20PIN);
+DallasTemperature sensor(&oneWire);
 
-// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
-OneWire oneWire(ONE_WIRE_BUS);
+WebServer server(80);
+float _temperature;
 
-// Pass our oneWire reference to Dallas Temperature.
-DallasTemperature sensors(&oneWire);
-
-/*
- * The setup function. We only start the sensors here
- */
-void setup(void)
-{
-  // start serial port
-  Serial.begin(9600);
-  Serial.println("Dallas Temperature IC Control Library Demo");
-
-  // Start up the library
-  sensors.begin();
+const char* ssid = "REDEWORK";         /*Enter Your SSID*/
+const char* password = "Acessonet05"; /*Enter Your Password*/
+ 
+void MainPage() {
+  String _html_page = html_page;              /*Read The HTML Page*/
+  server.send(200, "text/html", _html_page);  /*Send the code to the web server*/
 }
 
-/*
- * Main function, get and show the temperature
- */
-void loop(void)
-{
-  // call sensors.requestTemperatures() to issue a global temperature
-  // request to all devices on the bus
-  Serial.print("Requesting temperatures...");
-  sensors.requestTemperatures(); // Send the command to get temperatures
-  Serial.println("DONE");
-  delay(1500);
-  // After we got the temperatures, we can print them here.
-  // We use the function ByIndex, and as an example get the temperature from the first sensor only.
-  float tempC = sensors.getTempCByIndex(0);
+void Temp() {
+  String TempValue = String(_temperature);    //Convert it into string
+  server.send(200, "text/plane", TempValue);  //Send updated temperature value to the web server
+}
 
-  // Check if reading was successful
-  if (tempC != DEVICE_DISCONNECTED_C)
-  {
-    Serial.print("Temperature for the device 1 (index 0) is: ");
-    Serial.println(tempC);
-  }
-  else
-  {
-    Serial.println("Error: Could not read temperature data");
-  }
+void setup(void){
+  Serial.begin(115200);               /*Set the baudrate to 115200*/
+  WiFi.mode(WIFI_STA);                /*Set the WiFi in STA Mode*/
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  delay(1000);                       /*Wait for 1000mS*/
+  while(WiFi.waitForConnectResult() != WL_CONNECTED){Serial.print(".");}
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("Your Local IP address is: ");
+  Serial.println(WiFi.localIP());     /*Print the Local IP*/
+  sensor.begin();
+
+  server.on("/", MainPage);           /*Display the Web/HTML Page*/
+  server.on("/readTemp", Temp);       /*Display the updated Temperature and Humidity value*/
+  server.begin();                    /*Start Server*/
+  delay(1000);                       /*Wait for 1000mS*/
+}
+
+void loop(void){
+  sensor.requestTemperatures(); 
+  _temperature = sensor.getTempCByIndex(0); /* Read the temperature */
+  Serial.print("Temperature = ");
+  Serial.print(_temperature);         /* Print Temperature on the serial window */
+  Serial.println("ºC");
+  server.handleClient(); 
+  delay(1000);                       /* Wait for 1000mS */
 }
