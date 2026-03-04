@@ -80,8 +80,7 @@ const char html_page[] PROGMEM = R"rawliteral(
           let tempElement = document.getElementById("TempValue");
           let statusText = document.getElementById("StatusText");
 
-          tempElement.innerHTML = temp.toFixed(1) + " °C";
-
+          tempElement.innerHTML = temp.toFixed(1) + " &deg;C";
           if (temp < 20) {
             tempElement.className = "temp cold";
             statusText.innerHTML = "Ambiente Frio";

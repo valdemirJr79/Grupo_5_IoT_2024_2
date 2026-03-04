@@ -4,7 +4,7 @@
 #include <WebServer.h>
 #include "html.h"
 
-#define DS18B20PIN 02                      /* Connect DS18B20 to Pin No D2 of ESP32*/
+#define DS18B20PIN 04                      /* Connect DS18B20 to Pin No D2 of ESP32*/
 OneWire oneWire(DS18B20PIN);
 DallasTemperature sensor(&oneWire);
 
