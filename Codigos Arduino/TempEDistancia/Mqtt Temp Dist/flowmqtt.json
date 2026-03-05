@@ -1,0 +1,54 @@
+[
+    {
+        "id": "d9544c1f2183ba69",
+        "type": "mqtt in",
+        "z": "48dceeaffecc7d4d",
+        "name": "",
+        "topic": "SensorUltrassonicoJG",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "efb63fbc6b058ee9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 300,
+        "y": 280,
+        "wires": [
+            [
+                "a8a160b4894e0f3a"
+            ]
+        ]
+    },
+    {
+        "id": "efb63fbc6b058ee9",
+        "type": "mqtt-broker",
+        "name": "Broker",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "SensorUltrassonicoJG",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "SensorUltrassonicoJG",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
