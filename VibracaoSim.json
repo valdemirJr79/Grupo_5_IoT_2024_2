@@ -1,0 +1,842 @@
+[
+    {
+        "id": "5030cef3b87c34df",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e1f2c5560f781db9",
+        "type": "tab",
+        "label": "Simulação de Motor",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "27f2a2ad013295c8",
+        "type": "tab",
+        "label": "Monitoramento de Motor",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bae5c80a75a4f6c1",
+        "type": "tab",
+        "label": "Monitoramento de Motor",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ab0f0b0fd8bc9c15",
+        "type": "tab",
+        "label": "Monitoramento de Motor",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "25471636fdad1724",
+        "type": "ui_group",
+        "name": "Graficos",
+        "tab": "",
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "6b99292be5a9c86b",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "111aa68399eb62d8",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "f0b7d5d8b7f1e123",
+        "type": "ui_group",
+        "name": "Monitoramento",
+        "tab": "6b99292be5a9c86b",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "294fb09c307a8b0a",
+        "type": "ui_tab",
+        "name": "Vibração",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "e3dd85f19c3b4f08",
+        "type": "ui_tab",
+        "name": "Monitor de Vibração",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "dashboard_tab_id",
+        "type": "ui_tab",
+        "name": "Vibração Motor",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "9f8560e6a74a0ef2",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "banco_dados_vibracao",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "196c4f53fa96b500",
+        "type": "inject",
+        "z": "5030cef3b87c34df",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0,1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "e2813245167e9758"
+            ]
+        ]
+    },
+    {
+        "id": "e2813245167e9758",
+        "type": "function",
+        "z": "5030cef3b87c34df",
+        "name": "function 1",
+        "func": "// Recupera ou inicializa o tempo de início da simulação\nlet startTime = context.get('startTime') || Date.now();\nif (!context.get('startTime')) context.set('startTime', startTime);\n\n// Cálculo do tempo decorrido e da etapa atual (0 a 5)\nlet elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);\nlet step = Math.floor(elapsedSeconds / 5);\n\n// Reinicia a simulação após os 30 segundos (opcional)\nif (step > 5) {\n    step = 5; \n    // Se quiser que o ciclo recomece, use: context.set('startTime', Date.now()); step = 0;\n}\n\n// Definição das Amplitudes baseada na etapa\n// Etapa 0: 0 a 100 | Etapa 1: 100 a 280 ... Etapa 5: 820 a 1000\nlet maxAmpTotal = 1000;\nlet minAmpTotal = 0;\nlet numSteps = 6;\nlet increment = (maxAmpTotal - 100) / (numSteps - 1); // Incrementos de 180 por etapa\n\nlet currentMax = 100 + (step * increment);\nlet currentMin = step === 0 ? 0 : 100 + ((step - 1) * increment);\n\n// Função para gerar valor aleatório dentro do range da etapa\nfunction getVibration(min, max) {\n    let val = Math.random() * (max - min) + min;\n    return parseFloat((Math.random() > 0.5 ? val : -val).toFixed(2));\n}\n\n// Simulação dos Eixos\nlet vibX = getVibration(currentMin, currentMax);\nlet vibY = getVibration(currentMin, currentMax);\n// No eixo Z, somamos a gravidade (9.81) à vibração para simular o motor fixo\nlet vibZ = parseFloat((9.81 + getVibration(currentMin, currentMax)).toFixed(2));\n\n// Preparação das mensagens\nlet msgs = [\n    { topic: \"X\", payload: vibX, step: step + 1 },\n    { topic: \"Y\", payload: vibY, step: step + 1 },\n    { topic: \"Z\", payload: vibZ, step: step + 1 }\n];\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 220,
+        "wires": [
+            [
+                "29e3843f793b1397"
+            ]
+        ]
+    },
+    {
+        "id": "29e3843f793b1397",
+        "type": "ui_chart",
+        "z": "5030cef3b87c34df",
+        "name": "",
+        "group": "25471636fdad1724",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-1500",
+        "ymax": "1500",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 630,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cfdc656e41829d16",
+        "type": "inject",
+        "z": "e1f2c5560f781db9",
+        "name": "Gerar Leitura",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "9022ae5ff9feb341"
+            ]
+        ]
+    },
+    {
+        "id": "9022ae5ff9feb341",
+        "type": "function",
+        "z": "e1f2c5560f781db9",
+        "name": "Simular Vibração Progressiva",
+        "func": "// Recupera ou inicializa o tempo de início\nlet startTime = context.get('startTime') || Date.now();\n\n// Calcula o tempo decorrido\nlet elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);\n\n// LÓGICA DE REINÍCIO: Se passar de 30 segundos, reseta o ciclo\nif (elapsedSeconds >= 30) {\n    startTime = Date.now();\n    context.set('startTime', startTime);\n    elapsedSeconds = 0;\n}\n\nif (!context.get('startTime')) {\n    context.set('startTime', startTime);\n}\n\n// Cálculo da etapa atual (0 a 5)\nlet step = Math.floor(elapsedSeconds / 5);\n\n// CONFIGURAÇÃO PICO A PICO (Vpp)\n// Para 1000 pico a pico, o valor máximo real (amplitude de pico) é 500.\n// Etapa 1: Pico 50 (Vpp 100) -> Etapa 6: Pico 500 (Vpp 1000)\nlet maxPicoFinal = 500; \nlet picoInicial = 50;\nlet numSteps = 6;\nlet increment = (maxPicoFinal - picoInicial) / (numSteps - 1); // Aumenta 90 por etapa\n\nlet currentMax = picoInicial + (step * increment);\nlet currentMin = step === 0 ? 0 : picoInicial + ((step - 1) * increment);\n\n// Função para gerar vibração aleatória dentro do range da etapa\nfunction getVibration(min, max) {\n    // Gera um valor entre o mínimo e o máximo da etapa atual\n    let val = Math.random() * (max - min) + min;\n    // Define aleatoriamente se o pico é positivo ou negativo\n    return parseFloat((Math.random() > 0.5 ? val : -val).toFixed(2));\n}\n\n// Simulação dos Eixos\nlet vibX = getVibration(currentMin, currentMax);\nlet vibY = getVibration(currentMin, currentMax);\n// Eixo Z com gravidade (9.81) + vibração\nlet vibZ = parseFloat((9.81 + getVibration(currentMin, currentMax)).toFixed(2));\n\n// Preparação das mensagens\nlet msgs = [\n    { topic: \"X\", payload: vibX, vpp: (currentMax * 2).toFixed(0), step: step + 1 },\n    { topic: \"Y\", payload: vibY, vpp: (currentMax * 2).toFixed(0), step: step + 1 },\n    { topic: \"Z\", payload: vibZ, vpp: (currentMax * 2).toFixed(0), step: step + 1 }\n];\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "339d20fc5acaf656",
+                "2f33b0398421a57d",
+                "0124136f67a38cb7"
+            ]
+        ]
+    },
+    {
+        "id": "339d20fc5acaf656",
+        "type": "ui_chart",
+        "z": "e1f2c5560f781db9",
+        "name": "Gráfico Vibração",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Vibração do Motor (m/s²)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "-1050",
+        "ymax": "1050",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": true,
+        "className": "",
+        "x": 730,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f33b0398421a57d",
+        "type": "debug",
+        "z": "e1f2c5560f781db9",
+        "name": "Debug Valores",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "0124136f67a38cb7",
+        "type": "ui_gauge",
+        "z": "e1f2c5560f781db9",
+        "name": "",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{value}}",
+        "min": "-500",
+        "max": "500",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 730,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "4f7589382989f751",
+        "type": "inject",
+        "z": "27f2a2ad013295c8",
+        "name": "Gerar Leitura",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "0.2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "532ce96fd5bc1928"
+            ]
+        ]
+    },
+    {
+        "id": "532ce96fd5bc1928",
+        "type": "function",
+        "z": "27f2a2ad013295c8",
+        "name": "Simulador 6 Etapas (1000 Vpp)",
+        "func": "let startTime = context.get('startTime') || Date.now();\nlet elapsed = Math.floor((Date.now() - startTime) / 1000);\n\n// Reset após 30s (6 etapas * 5s)\nif (elapsed >= 30) {\n    startTime = Date.now();\n    context.set('startTime', startTime);\n    elapsed = 0;\n}\ncontext.set('startTime', startTime);\n\nlet step = Math.floor(elapsed / 5);\n\n// Configuração Pico a Pico (1000 Vpp = Pico de 500)\nlet maxPicoFinal = 500;\nlet picoInicial = 50;\nlet increment = (maxPicoFinal - picoInicial) / 5;\n\nlet currentMax = picoInicial + (step * increment);\nlet currentMin = step === 0 ? 0 : picoInicial + ((step - 1) * increment);\n\nfunction getVib(min, max) {\n    let val = Math.random() * (max - min) + min;\n    return parseFloat((Math.random() > 0.5 ? val : -val).toFixed(2));\n}\n\nlet x = getVib(currentMin, currentMax);\nlet y = getVib(currentMin, currentMax);\nlet z = parseFloat((9.81 + getVib(currentMin, currentMax)).toFixed(2));\n\nreturn [\n    { topic: \"X\", payload: x, step: step + 1 },\n    { topic: \"Y\", payload: y, step: step + 1 },\n    { topic: \"Z\", payload: z, step: step + 1 }\n];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [
+                "d3da0c49f81d9a22",
+                "f916a3b2d720ffcc",
+                "835cabb985c6cae2"
+            ]
+        ]
+    },
+    {
+        "id": "835cabb985c6cae2",
+        "type": "function",
+        "z": "27f2a2ad013295c8",
+        "name": "Lógica de Alarme",
+        "func": "const LIMIAR_CRITICO = 450;\n\nif (Math.abs(msg.payload) > LIMIAR_CRITICO) {\n    return {\n        payload: \"ALERTA: Vibração Crítica no Eixo \" + msg.topic + \"! Valor: \" + msg.payload,\n        severity: \"critico\",\n        value: msg.payload\n    };\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 240,
+        "wires": [
+            [
+                "f916a3b2d720ffcc"
+            ]
+        ]
+    },
+    {
+        "id": "d3da0c49f81d9a22",
+        "type": "ui_chart",
+        "z": "27f2a2ad013295c8",
+        "name": "Gráfico Vibração",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 12,
+        "height": 6,
+        "label": "Vibração em Tempo Real (m/s²)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-550",
+        "ymax": "550",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c"
+        ],
+        "outputs": 1,
+        "useDifferentColor": true,
+        "className": "",
+        "x": 640,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f916a3b2d720ffcc",
+        "type": "debug",
+        "z": "27f2a2ad013295c8",
+        "name": "Console",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "1ed30084fac995eb",
+        "type": "inject",
+        "z": "bae5c80a75a4f6c1",
+        "name": "Gerar Leitura",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "c3a46d6637300f8b"
+            ]
+        ]
+    },
+    {
+        "id": "c3a46d6637300f8b",
+        "type": "function",
+        "z": "bae5c80a75a4f6c1",
+        "name": "Simulador 6 Etapas (1000 Vpp)",
+        "func": "let startTime = context.get('startTime') || Date.now();\nlet elapsed = Math.floor((Date.now() - startTime) / 1000);\n\nif (elapsed >= 30) {\n    startTime = Date.now();\n    context.set('startTime', startTime);\n    elapsed = 0;\n}\ncontext.set('startTime', startTime);\n\nlet step = Math.floor(elapsed / 5);\nlet maxPicoFinal = 500;\nlet picoInicial = 50;\nlet increment = (maxPicoFinal - picoInicial) / 5;\n\nlet currentMax = picoInicial + (step * increment);\nlet currentMin = step === 0 ? 0 : picoInicial + ((step - 1) * increment);\n\nfunction getVib(min, max) {\n    let val = Math.random() * (max - min) + min;\n    return parseFloat((Math.random() > 0.5 ? val : -val).toFixed(2));\n}\n\nlet x = getVib(currentMin, currentMax);\nlet y = getVib(currentMin, currentMax);\nlet z = parseFloat((9.81 + getVib(currentMin, currentMax)).toFixed(2));\n\nreturn [\n    { topic: \"X\", payload: x, step: step + 1 },\n    { topic: \"Y\", payload: y, step: step + 1 },\n    { topic: \"Z\", payload: z, step: step + 1 }\n];",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [
+                "5467d3c69bb2e833",
+                "d4b527a8734b3fa2"
+            ]
+        ]
+    },
+    {
+        "id": "d4b527a8734b3fa2",
+        "type": "function",
+        "z": "bae5c80a75a4f6c1",
+        "name": "Lógica de Alarme",
+        "func": "const LIMIAR_CRITICO = 450;\n\nif (Math.abs(msg.payload) > LIMIAR_CRITICO) {\n    msg.payload = \"⚠️ ALERTA: Vibração Crítica no Eixo \" + msg.topic + \"! (\" + msg.payload + \" m/s²)\";\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 240,
+        "wires": [
+            [
+                "952841159ed6526a",
+                "b4d96f4e1b18f36e"
+            ]
+        ]
+    },
+    {
+        "id": "952841159ed6526a",
+        "type": "ui_toast",
+        "z": "bae5c80a75a4f6c1",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "#ff0000",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "Alarme",
+        "name": "Pop-up Alerta",
+        "x": 860,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b4d96f4e1b18f36e",
+        "type": "ui_text",
+        "z": "bae5c80a75a4f6c1",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "Status Monitor",
+        "label": "Último Evento:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#ff0000",
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "5467d3c69bb2e833",
+        "type": "ui_chart",
+        "z": "bae5c80a75a4f6c1",
+        "name": "Gráfico Vibração",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 12,
+        "height": 6,
+        "label": "Vibração em Tempo Real (m/s²)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-550",
+        "ymax": "550",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c"
+        ],
+        "outputs": 1,
+        "useDifferentColor": true,
+        "className": "",
+        "x": 640,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "16ca90582ffce449",
+        "type": "inject",
+        "z": "ab0f0b0fd8bc9c15",
+        "name": "Gerar Leitura",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "8d121bbfc32b16b9"
+            ]
+        ]
+    },
+    {
+        "id": "8d121bbfc32b16b9",
+        "type": "function",
+        "z": "ab0f0b0fd8bc9c15",
+        "name": "Simulador 3 Eixos (1000 Vpp)",
+        "func": "let startTime = context.get('startTime') || Date.now();\nlet elapsed = Math.floor((Date.now() - startTime) / 1000);\n\n// Reset após 30s (6 etapas * 5s)\nif (elapsed >= 30) {\n    startTime = Date.now();\n    context.set('startTime', startTime);\n    elapsed = 0;\n}\ncontext.set('startTime', startTime);\n\n// Cálculo da etapa atual (0 a 5)\nlet step = Math.floor(elapsed / 5);\n\n// Configuração Pico a Pico (1000 Vpp = Pico de 500)\nlet maxPicoFinal = 500;\nlet picoInicial = 50;\nlet increment = (maxPicoFinal - picoInicial) / 5;\n\n// Define apenas o valor máximo da etapa. O mínimo agora é sempre 0.\nlet currentMax = picoInicial + (step * increment);\n\nfunction getVib(max) {\n    // Agora gera um valor aleatório de 0 até o máximo da etapa atual\n    let val = Math.random() * max;\n    // Define aleatoriamente se o pico é positivo ou negativo\n    return parseFloat((Math.random() > 0.5 ? val : -val).toFixed(2));\n}\n\n// Gerando os dados para os 3 eixos\nlet x = getVib(currentMax);\nlet y = getVib(currentMax);\n// Eixo Z com offset de gravidade (9.81)\nlet z = parseFloat((9.81 + getVib(currentMax)).toFixed(2));\n\n// Enviando as 3 mensagens individualmente para processamento e gráfico\nnode.send({ topic: \"Eixo X\", payload: x, step: step + 1, max_peak: currentMax });\nnode.send({ topic: \"Eixo Y\", payload: y, step: step + 1, max_peak: currentMax });\nnode.send({ topic: \"Eixo Z\", payload: z, step: step + 1, max_peak: currentMax });\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [
+                "4bd15b9bb4efaab1",
+                "46179f7409d15551"
+            ]
+        ]
+    },
+    {
+        "id": "46179f7409d15551",
+        "type": "function",
+        "z": "ab0f0b0fd8bc9c15",
+        "name": "Lógica de Alarme",
+        "func": "const LIMIAR_CRITICO = 450;\n\n// Para o Eixo Z, ignoramos o offset da gravidade (9.81) no cálculo do alarme\nlet valorVerificacao = msg.topic === \"Eixo Z\" ? Math.abs(msg.payload - 9.81) : Math.abs(msg.payload);\n\nif (valorVerificacao > LIMIAR_CRITICO) {\n    msg.payload = \"⚠️ CRÍTICO: \" + msg.topic + \" ultrapassou limite! Valor: \" + msg.payload;\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 240,
+        "wires": [
+            [
+                "0d2236b2e9a1370c",
+                "9f7f04a4553cc2eb"
+            ]
+        ]
+    },
+    {
+        "id": "0d2236b2e9a1370c",
+        "type": "ui_toast",
+        "z": "ab0f0b0fd8bc9c15",
+        "position": "top right",
+        "displayTime": "1",
+        "highlight": "#ff0000",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "Pop-up Alerta",
+        "x": 860,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "9f7f04a4553cc2eb",
+        "type": "ui_text",
+        "z": "ab0f0b0fd8bc9c15",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "Status Monitor",
+        "label": "Status:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 14,
+        "color": "#ff0000",
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4bd15b9bb4efaab1",
+        "type": "ui_chart",
+        "z": "ab0f0b0fd8bc9c15",
+        "name": "Gráfico Vibração",
+        "group": "f0b7d5d8b7f1e123",
+        "order": 1,
+        "width": 12,
+        "height": 6,
+        "label": "Monitor Triaxial (m/s²)",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-550",
+        "ymax": "550",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#0000ff",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": true,
+        "className": "",
+        "x": 640,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    }
+]
