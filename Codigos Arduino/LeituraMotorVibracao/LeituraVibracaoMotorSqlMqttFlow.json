@@ -1,0 +1,132 @@
+[
+    {
+        "id": "75791d2f481321cf",
+        "type": "tab",
+        "label": "Fluxo 4",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "48264f01d93fac66",
+        "type": "mqtt in",
+        "z": "75791d2f481321cf",
+        "name": "Receber ADXL",
+        "topic": "adxl345/v1",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "efb63fbc6b058ee9",
+        "inputs": 0,
+        "x": 200,
+        "y": 200,
+        "wires": [
+            [
+                "c3d675a7b9bc30ce"
+            ]
+        ]
+    },
+    {
+        "id": "c3d675a7b9bc30ce",
+        "type": "function",
+        "z": "75791d2f481321cf",
+        "name": "Parse X Y Z",
+        "func": "let data = msg.payload;\n\nlet match = data.match(/X:\\s*(-?\\d+\\.?\\d*)\\s+Y:\\s*(-?\\d+\\.?\\d*)\\s+Z:\\s*(-?\\d+\\.?\\d*)/);\n\nif (match) {\n    let x = parseFloat(match[1]);\n    let y = parseFloat(match[2]);\n    let z = parseFloat(match[3]);\n\n    msg.payload = { x, y, z };\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "7a805ff3aa05e4f6",
+                "3487edc41d6a117f"
+            ]
+        ]
+    },
+    {
+        "id": "7a805ff3aa05e4f6",
+        "type": "function",
+        "z": "75791d2f481321cf",
+        "name": "Gerar SQL",
+        "func": "let data = new Date();\nlet agora = data.getFullYear() + \"-\" +\n    (\"0\" + (data.getMonth() + 1)).slice(-2) + \"-\" +\n    (\"0\" + data.getDate()).slice(-2) + \" \" +\n    (\"0\" + data.getHours()).slice(-2) + \":\" +\n    (\"0\" + data.getMinutes()).slice(-2) + \":\" +\n    (\"0\" + data.getSeconds()).slice(-2);\n\nlet x = msg.payload.x;\nlet y = msg.payload.y;\nlet z = msg.payload.z;\n\nmsg.topic = `INSERT INTO adxl345 (x, y, z, datahora) VALUES (${x}, ${y}, ${z}, '${agora}')`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "1889512a1a2212bb"
+            ]
+        ]
+    },
+    {
+        "id": "1889512a1a2212bb",
+        "type": "mysql",
+        "z": "75791d2f481321cf",
+        "mydb": "0fdbbcec66372005",
+        "name": "MySQL",
+        "x": 840,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3487edc41d6a117f",
+        "type": "debug",
+        "z": "75791d2f481321cf",
+        "name": "Debug",
+        "active": true,
+        "complete": "payload",
+        "x": 600,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "efb63fbc6b058ee9",
+        "type": "mqtt-broker",
+        "name": "Broker",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "Sensor",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "SensorUltrassonicoJG",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0fdbbcec66372005",
+        "type": "MySQLdatabase",
+        "name": "mydb",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "sa",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
