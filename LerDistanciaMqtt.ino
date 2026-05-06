@@ -1,73 +1,115 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <ArduinoOTA.h>
 
 // Wi-Fi credentials
 const char* ssid = "REDEWORK";
 const char* password = "Acessonet05";
 
-// MQTT Broker (your Raspberry Pi)
-const char* mqtt_server = "192.168.1.8"; // replace with your Pi's IP
+// MQTT Broker
+const char* mqtt_server = "192.168.1.8";
 const int mqtt_port = 1883;
-const char* mqtt_topic = "status/estacionamento";  // topic for this parking spot
+const char* mqtt_topic = "status/estacionamento";
 
 #define trigPin 13
 #define echoPin 12
 
-// Distance threshold (cm) to consider spot occupied
-const int occupiedThreshold = 30; // adjust based on sensor placement
+const int occupiedThreshold = 10;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-String lastStatus = ""; // track last published state
+String lastStatus = "";
 
-void setup() {
-  Serial.begin(115200);
-
-  // HC-SR04 setup
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-
-  // Connect to Wi-Fi
+// ================= WIFI =================
+void connectWiFi() {
   WiFi.begin(ssid, password);
-  Serial.print("Connecting to Wi-Fi");
+  Serial.print("Conectando ao Wi-Fi");
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWi-Fi connected!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
 
-  // Connect to MQTT broker
-  client.setServer(mqtt_server, mqtt_port);
-  connectMQTT();
+  Serial.println("\nWi-Fi conectado!");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
 }
 
+// ================= MQTT =================
 void connectMQTT() {
   while (!client.connected()) {
-    Serial.print("Connecting to MQTT...");
+    Serial.print("Conectando ao MQTT...");
     if (client.connect("ESP32ParkingSpot")) {
-      Serial.println("connected");
+      Serial.println("conectado");
     } else {
-      Serial.print("failed, rc=");
+      Serial.print("falhou, rc=");
       Serial.print(client.state());
-      Serial.println(" retrying in 2 seconds");
+      Serial.println(" tentando novamente...");
       delay(2000);
     }
   }
 }
 
+// ================= SETUP =================
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  connectWiFi();
+
+  client.setServer(mqtt_server, mqtt_port);
+
+  // ================= OTA =================
+  ArduinoOTA.setHostname("esp32-estacionamento");
+
+  // (opcional) senha
+  // ArduinoOTA.setPassword("123456");
+
+  ArduinoOTA.onStart([]() {
+    Serial.println("Iniciando OTA...");
+  });
+
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nOTA finalizado!");
+  });
+
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progresso: %u%%\r", (progress / (total / 100)));
+  });
+
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Erro OTA[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+  });
+
+  ArduinoOTA.begin();
+
+  connectMQTT();
+}
+
+// ================= LOOP =================
 void loop() {
+  // OTA sempre rodando
+  ArduinoOTA.handle();
+
   if (!client.connected()) {
     connectMQTT();
   }
   client.loop();
 
-  // Measure distance
+  // ===== SENSOR =====
   long duration, distance;
+
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
+
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
@@ -75,18 +117,15 @@ void loop() {
   duration = pulseIn(echoPin, HIGH);
   distance = (duration / 2) / 29.1;
 
+  String status = (distance <= occupiedThreshold) ? "Vaga ocupada" : "Vaga livre";
 
-  // Determine parking spot status
-  String status = (distance <= occupiedThreshold) ? "Ocupado" : "Livre";
-
-  // Only publish if status changed
   if (status != lastStatus) {
-    Serial.print("Parking spot status changed: ");
+    Serial.print("Status mudou: ");
     Serial.println(status);
 
     client.publish(mqtt_topic, status.c_str());
-    lastStatus = status; // update last known state
+    lastStatus = status;
   }
 
-  delay(2000); // update every second
+  delay(2000);
 }
