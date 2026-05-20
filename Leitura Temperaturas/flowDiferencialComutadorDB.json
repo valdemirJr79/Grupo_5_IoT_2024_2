@@ -1,0 +1,203 @@
+[
+    {
+        "id": "2578216f7e7d0506",
+        "type": "tab",
+        "label": "Monitoramento de Temperatura do Cubículo",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "f9df9b9df5ed419e",
+        "type": "mqtt in",
+        "z": "2578216f7e7d0506",
+        "name": "Sensores de Temperatura",
+        "topic": "senai/temperatura/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "8fa476e0b5b73c9a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "28501d358f7510bf"
+            ]
+        ]
+    },
+    {
+        "id": "28501d358f7510bf",
+        "type": "function",
+        "z": "2578216f7e7d0506",
+        "name": "Calcular Diferencial",
+        "func": "// Tópicos MQTT esperados:\n// senai/temperatura/sensor1\n// senai/temperatura/sensor2\n\nlet sensor1 = flow.get('sensor1');\nlet sensor2 = flow.get('sensor2');\n\nif (msg.topic === 'senai/temperatura/sensor1') {\n    sensor1 = Number(msg.payload);\n    flow.set('sensor1', sensor1);\n}\n\nif (msg.topic === 'senai/temperatura/sensor2') {\n    sensor2 = Number(msg.payload);\n    flow.set('sensor2', sensor2);\n}\n\n// Aguarda os dois sensores receberem valores\nif (sensor1 === undefined || sensor2 === undefined) {\n    return null;\n}\n\nlet diferencial = Math.abs(sensor1 - sensor2);\n\nlet status = 'NORMAL';\nlet cor = 'green';\n\nif (diferencial > 5 && diferencial < 15) {\n    status = 'ALERTA';\n    cor = 'yellow';\n}\n\nif (diferencial >= 15) {\n    status = 'PERIGO';\n    cor = 'red';\n}\n\nnode.status({\n    fill: cor,\n    shape: 'dot',\n    text: `${status} ΔT=${diferencial.toFixed(1)}°C`\n});\n\n// Mensagem SQL\nlet sqlMsg = {\n    topic: `INSERT INTO registros_temperatura (sensor1, sensor2, diferencial, status)\n             VALUES (${sensor1}, ${sensor2}, ${diferencial}, '${status}')`\n};\n\nreturn [\n    {\n        topic: 'Sensor 1',\n        payload: sensor1\n    },\n    {\n        topic: 'Sensor 2',\n        payload: sensor2\n    },\n    {\n        topic: 'Diferencial',\n        payload: diferencial\n    },\n    {\n        topic: 'Limite 5°C',\n        payload: 5\n    },\n    {\n        topic: 'Limite 15°C',\n        payload: 15\n    },\n    {\n        payload: {\n            sensor1: sensor1,\n            sensor2: sensor2,\n            diferencial: diferencial.toFixed(1),\n            status: status\n        }\n    },\n    sqlMsg\n];",
+        "outputs": 7,
+        "noerr": 0,
+        "x": 500,
+        "y": 140,
+        "wires": [
+            [
+                "52d34c66a35e2d0c"
+            ],
+            [
+                "52d34c66a35e2d0c"
+            ],
+            [
+                "52d34c66a35e2d0c"
+            ],
+            [
+                "52d34c66a35e2d0c"
+            ],
+            [
+                "52d34c66a35e2d0c"
+            ],
+            [
+                "9511a703006926d9",
+                "1247e013bc62c6d3"
+            ],
+            [
+                "b9411357df8063e2"
+            ]
+        ]
+    },
+    {
+        "id": "52d34c66a35e2d0c",
+        "type": "ui_chart",
+        "z": "2578216f7e7d0506",
+        "name": "Gráfico de Temperatura",
+        "group": "3ce082d98c1a5d85",
+        "order": 1,
+        "width": "12",
+        "height": "7",
+        "label": "Monitoramento Térmico do Cubículo",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados dos sensores...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "40",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#d62728",
+            "#2ca02c",
+            "#9467bd"
+        ],
+        "outputs": 1,
+        "x": 880,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1247e013bc62c6d3",
+        "type": "ui_text",
+        "z": "2578216f7e7d0506",
+        "group": "3ce082d98c1a5d85",
+        "order": 2,
+        "width": "12",
+        "height": "2",
+        "name": "Status do Sistema",
+        "label": "Status do Cubículo",
+        "format": "Status: {{msg.payload.status}} | ΔT = {{msg.payload.diferencial}} °C",
+        "layout": "row-spread",
+        "x": 870,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "9511a703006926d9",
+        "type": "debug",
+        "z": "2578216f7e7d0506",
+        "name": "Debug Diferencial",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "payload",
+        "x": 870,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b9411357df8063e2",
+        "type": "mysql",
+        "z": "2578216f7e7d0506",
+        "mydb": "7696ab7450efda14",
+        "name": "Inserir no MariaDB",
+        "x": 860,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8fa476e0b5b73c9a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "3ce082d98c1a5d85",
+        "type": "ui_group",
+        "name": "Switchgear",
+        "tab": "bcf933d4f5338463",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7696ab7450efda14",
+        "type": "MySQLdatabase",
+        "name": "MariaDB",
+        "host": "localhost",
+        "port": "3306",
+        "db": "comutador",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "bcf933d4f5338463",
+        "type": "ui_tab",
+        "name": "Temperature Dashboard",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
