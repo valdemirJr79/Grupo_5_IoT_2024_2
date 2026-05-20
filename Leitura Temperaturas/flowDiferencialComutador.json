@@ -1,0 +1,195 @@
+[
+    {
+        "id": "99018d9797555cc3",
+        "type": "tab",
+        "label": "Switchgear Temperature Monitoring",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "043630600225caa0",
+        "type": "mqtt in",
+        "z": "99018d9797555cc3",
+        "name": "Temperature Sensors",
+        "topic": "senai/temperatura/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "8fa476e0b5b73c9a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 140,
+        "wires": [
+            [
+                "0b39e335f3ab748a"
+            ]
+        ]
+    },
+    {
+        "id": "0b39e335f3ab748a",
+        "type": "function",
+        "z": "99018d9797555cc3",
+        "name": "Calculate Differential",
+        "func": "// MQTT Topics Expected:\n// senai/temperatura/sensor1\n// senai/temperatura/sensor2\n\nlet sensor1 = flow.get('sensor1');\nlet sensor2 = flow.get('sensor2');\n\nif (msg.topic === 'senai/temperatura/sensor1') {\n    sensor1 = Number(msg.payload);\n    flow.set('sensor1', sensor1);\n}\n\nif (msg.topic === 'senai/temperatura/sensor2') {\n    sensor2 = Number(msg.payload);\n    flow.set('sensor2', sensor2);\n}\n\n// Wait until both sensors have values\nif (sensor1 === undefined || sensor2 === undefined) {\n    return null;\n}\n\nlet differential = Math.abs(sensor1 - sensor2);\n\nlet status = 'NORMAL';\nlet color = 'green';\n\nif (differential > 5 && differential < 15) {\n    status = 'ALERT';\n    color = 'yellow';\n}\n\nif (differential >= 15) {\n    status = 'DANGER';\n    color = 'red';\n}\n\nnode.status({\n    fill: color,\n    shape: 'dot',\n    text: `${status} ΔT=${differential.toFixed(1)}°C`\n});\n\n// Chart messages\nlet chartMessages = [\n    {\n        topic: 'Sensor 1',\n        payload: sensor1\n    },\n    {\n        topic: 'Sensor 2',\n        payload: sensor2\n    },\n    {\n        topic: 'Differential',\n        payload: differential\n    },\n    {\n        topic: 'Limit 5°C',\n        payload: 5\n    },\n    {\n        topic: 'Limit 15°C',\n        payload: 15\n    }\n];\n\n// Status message\nlet statusMessage = {\n    payload: {\n        sensor1: sensor1,\n        sensor2: sensor2,\n        differential: differential.toFixed(1),\n        status: status\n    }\n};\n\nreturn [chartMessages[0],\n        chartMessages[1],\n        chartMessages[2],\n        chartMessages[3],\n        chartMessages[4],\n        statusMessage];",
+        "outputs": 6,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "314e1452244c5528"
+            ],
+            [
+                "314e1452244c5528"
+            ],
+            [
+                "314e1452244c5528"
+            ],
+            [
+                "314e1452244c5528"
+            ],
+            [
+                "314e1452244c5528"
+            ],
+            [
+                "867dec221216dd1f",
+                "283f56672e6605f8"
+            ]
+        ]
+    },
+    {
+        "id": "314e1452244c5528",
+        "type": "ui_chart",
+        "z": "99018d9797555cc3",
+        "name": "Temperature Chart",
+        "group": "3ce082d98c1a5d85",
+        "order": 1,
+        "width": "12",
+        "height": "7",
+        "label": "Switchgear Temperature Differential",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting for sensor data...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "40",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#ff7f0e",
+            "#d62728",
+            "#2ca02c",
+            "#9467bd",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 850,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "283f56672e6605f8",
+        "type": "ui_text",
+        "z": "99018d9797555cc3",
+        "group": "3ce082d98c1a5d85",
+        "order": 2,
+        "width": "12",
+        "height": "2",
+        "name": "Status Display",
+        "label": "Switchgear Status",
+        "format": "Status: {{msg.payload.status}} | ΔT = {{msg.payload.differential}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 850,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "867dec221216dd1f",
+        "type": "debug",
+        "z": "99018d9797555cc3",
+        "name": "Differential Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 850,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "8fa476e0b5b73c9a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "3ce082d98c1a5d85",
+        "type": "ui_group",
+        "name": "Switchgear",
+        "tab": "bcf933d4f5338463",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bcf933d4f5338463",
+        "type": "ui_tab",
+        "name": "Temperature Dashboard",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
