@@ -1,0 +1,23 @@
+[
+    {
+        "id": "7bcd52814c1cdbd4",
+        "type": "function",
+        "z": "19efc34f8836c871",
+        "name": "function 5",
+        "func": "let sensor1 = [];\nlet sensor2 = [];\n\nmsg.payload.forEach(row => {\n    sensor1.push(Number(row.sensor1));\n    sensor2.push(Number(row.sensor2));\n});\n\nfunction calcularMediana(vetor) {\n    let ordenado = [...vetor].sort((a, b) => a - b);\n    let meio = Math.floor(ordenado.length / 2);\n\n    if (ordenado.length % 2 === 0) {\n        return (ordenado[meio - 1] + ordenado[meio]) / 2;\n    }\n\n    return ordenado[meio];\n}\n\nlet medianaSensor1 = calcularMediana(sensor1);\nlet medianaSensor2 = calcularMediana(sensor2);\n\n// Informações para Debug interno\nmsg.debug = {\n    quantidadeRegistros: msg.payload.length,\n    medianaSensor1,\n    medianaSensor2\n};\n\n// --- VALIDAÇÃO DOS INTERVALOS ---\n// Sensor 1: entre 23 e 30 | Sensor 2: entre 15 e 23\nconst s1Valido = (medianaSensor1 >= 23 && medianaSensor1 <= 30);\nconst s2Valido = (medianaSensor2 >= 15 && medianaSensor2 <= 23);\n\nif (s1Valido && s2Valido) {\n    // Se ambos forem válidos, prepara o SQL e envia a mensagem adiante\n    msg.topic = `\n    INSERT INTO resultado (\n        mediana_sensor1,\n        mediana_sensor2,\n        data_registro\n    )\n    VALUES (?, ?, NOW())\n    `;\n\n    msg.payload = [\n        medianaSensor1,\n        medianaSensor2\n    ];\n\n    return msg;\n} else {\n    // Se algum estiver fora do padrão, interrompe o fluxo aqui (não salva e não gera o debug seguinte)\n    node.status({ fill: \"red\", shape: \"dot\", text: `Fora do limite! S1: ${medianaSensor1.toFixed(1)} | S2: ${medianaSensor2.toFixed(1)}` });\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 520,
+        "wires": [
+            [
+                "682889830bc5df28",
+                "7f54a58aa278f909"
+            ]
+        ]
+    }
+]
