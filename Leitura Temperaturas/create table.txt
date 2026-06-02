@@ -1,0 +1,13 @@
+CREATE DATABASE `comutador` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+
+CREATE TABLE `registros_temperatura` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `data_hora` datetime DEFAULT current_timestamp(),
+  `sensor1` float DEFAULT NULL,
+  `sensor2` float DEFAULT NULL,
+  `diferencial` float DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `variacao1` float DEFAULT NULL,
+  `variacao2` float DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2819 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
