@@ -1,0 +1,193 @@
+[
+    {
+        "id": "tab1",
+        "type": "tab",
+        "label": "Parking System",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "mqtt_in_1",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "ESP32 Parking MQTT",
+        "topic": "status/estacionamento",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8fa476e0b5b73c9a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "fn_main_1",
+                "dbg_in"
+            ]
+        ]
+    },
+    {
+        "id": "fn_main_1",
+        "type": "function",
+        "z": "tab1",
+        "name": "Update Parking Status",
+        "func": "let msgIn = msg.payload;\n\nlet spot = flow.get(\"spot\") || \"A1\";\n\nlet statusEnum;\n\nif (msgIn === \"Vaga ocupada\") {\n    statusEnum = \"Ocupado\";\n} else if (msgIn === \"Vaga livre\") {\n    statusEnum = \"Livre\";\n} else {\n    node.error(\"Unknown status: \" + msgIn);\n    return null;\n}\n\nmsg.topic = `UPDATE estacionamento SET estacionamentostatus = ? WHERE estacionamentonumero = ?`;\nmsg.payload = [statusEnum, spot];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 120,
+        "wires": [
+            [
+                "mysql_1",
+                "dbg_out"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_1",
+        "type": "mysql",
+        "z": "tab1",
+        "mydb": "mysql_config_1",
+        "name": "MySQL Update",
+        "x": 670,
+        "y": 120,
+        "wires": [
+            [
+                "dbg_db"
+            ]
+        ]
+    },
+    {
+        "id": "inject_spot",
+        "type": "inject",
+        "z": "tab1",
+        "name": "Set Spot (A1/A2/A3)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "A104",
+        "payloadType": "str",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "fn_set_spot"
+            ]
+        ]
+    },
+    {
+        "id": "fn_set_spot",
+        "type": "function",
+        "z": "tab1",
+        "name": "Set Parking Spot",
+        "func": "flow.set(\"spot\", msg.payload);\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Spot: \" + msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dbg_in",
+        "type": "debug",
+        "z": "tab1",
+        "name": "MQTT In",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 420,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "dbg_out",
+        "type": "debug",
+        "z": "tab1",
+        "name": "SQL Payload",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 670,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "dbg_db",
+        "type": "debug",
+        "z": "tab1",
+        "name": "DB Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "8fa476e0b5b73c9a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "mysql_config_1",
+        "type": "MySQLdatabase",
+        "name": "Parking DB",
+        "host": "localhost",
+        "port": "3306",
+        "db": "mydb2",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
